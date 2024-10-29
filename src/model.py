@@ -3,7 +3,10 @@ import pandas as pd
 
 class Model:
 
-    def place_bets(self, opps: pd.DataFrame, summary: pd.DataFrame, inc: pd.DataFrame):
+    def place_bets(self, summary: pd.DataFrame, opps: pd.DataFrame, inc: pd.DataFrame):
+        date = summary.iloc[0]["Date"]
+        bankroll = summary.iloc[0]["Bankroll"]
+        print(f"{date} Bankroll: {bankroll:.2f}   ", end="\r")
         min_bet = summary.iloc[0]["Min_bet"]
         N = len(opps)
         bets = np.zeros((N, 2))

@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class IModel:
-    def place_bets(self, summary: pd.DataFrame, inc: pd.DataFrame, opps: pd.DataFrame):
+    def place_bets(self, summary: pd.DataFrame, opps: pd.DataFrame, inc: pd.DataFrame):
         raise NotImplementedError()
 
 
@@ -29,26 +29,26 @@ class Environment:
 
     def __init__(
         self,
-        df: pd.DataFrame,
+        games: pd.DataFrame,
+        players: pd.DataFrame,
         model: IModel,
         start_date: Optional[pd.Timestamp] = None,
         end_date: Optional[pd.Timestamp] = None,
-        last_recorded_date: Optional[pd.Timestamp] = None,
         init_bankroll=1000.0,
         min_bet=0,
         max_bet=np.inf,
     ):
 
-        self.df = df
-        self.df[self.bet_cols] = 0.0
+        self.games = games
+        self.players = players
+        self.games[self.bet_cols] = 0.0
 
         self.start_date: pd.Timestamp = (
-            start_date if start_date is not None else self.df["Open"].min()
+            start_date if start_date is not None else self.games["Open"].min()
         )
         self.end_date: pd.Timestamp = (
-            end_date if end_date is not None else self.df["Date"].max()
+            end_date if end_date is not None else self.games["Date"].max()
         )
-        self.last_recorded_date = last_recorded_date
 
         self.model = model
 
@@ -61,9 +61,10 @@ class Environment:
         self.history = {"Date": [], "Bankroll": [], "Cash_Invested": []}
 
     def run(self):
+        print(f"Start: {self.start_date}, End: {self.end_date}")
         for date in pd.date_range(self.start_date, self.end_date):
 
-            # get game results from previous day(s) and evaluate bets
+            # get results from previous day(s) and evaluate bets
             inc = self._next_date(date)
 
             # get betting options for current day
@@ -74,16 +75,16 @@ class Environment:
 
             summary = self._generate_summary(date)
 
-            bets = self.model.place_bets(opps, summary, inc)
+            bets = self.model.place_bets(summary, opps, inc)
 
             validated_bets = self._validate_bets(bets, opps)
-            
+
             self._place_bets(date, validated_bets)
 
         # evaluate bets of last game day
         self._next_date(self.end_date + pd.to_timedelta(1, "days"))
 
-        return self.df
+        return self.games
 
     def get_history(self):
         history = pd.DataFrame(data=self.history)
@@ -91,14 +92,19 @@ class Environment:
         return history
 
     def _next_date(self, date: pd.Timestamp):
-        inc = self.df.loc[(self.df["Date"] > self.last_seen) & (self.df["Date"] < date)]
-        self.last_seen = inc["Date"].max() if not inc.empty else self.last_seen
+        games = self.games.loc[
+            (self.games["Date"] > self.last_seen) & (self.games["Date"] < date)
+        ]
+        players = self.players.loc[
+            (self.players["Date"] > self.last_seen) & (self.players["Date"] < date)
+        ]
+        self.last_seen = games["Date"].max() if not games.empty else self.last_seen
 
-        if not inc.empty:
+        if not games.empty:
             # evaluate bets
-            b = inc[self.bet_cols].values
-            o = inc[self.odds_cols].values
-            r = inc[self.result_cols].values
+            b = games[self.bet_cols].values
+            o = games[self.odds_cols].values
+            r = games[self.result_cols].values
             winnings = (b * r * o).sum(axis=1).sum()
 
             # update bankroll with the winnings
@@ -107,18 +113,15 @@ class Environment:
             # save current bankroll
             self._save_state(date + pd.Timedelta(6, unit="h"), 0.0)
 
-        return inc
+        return games, players
 
     def _get_options(self, date: pd.Timestamp):
-        opps = self.df.loc[(self.df["Open"] <= date) & (self.df["Date"] >= date)]
+        opps = self.games.loc[
+            (self.games["Open"] <= date) & (self.games["Date"] >= date)
+        ]
         opps = opps.loc[opps[self.odds_cols].sum(axis=1) > 0]
         return opps.drop(
-            [
-                *self.score_cols,
-                *self.result_cols,
-                *self.feature_cols,
-                "Open",
-            ],
+            [*self.score_cols, *self.result_cols, *self.feature_cols, "Open"],
             axis=1,
         )
 
@@ -143,7 +146,8 @@ class Environment:
         return validated_bets
 
     def _place_bets(self, date: pd.Timestamp, bets: pd.DataFrame):
-        self.df.loc[bets.index, self.bet_cols] = self.df.loc[
+        # print("Placing bets")
+        self.games.loc[bets.index, self.bet_cols] = self.games.loc[
             bets.index, self.bet_cols
         ].add(bets, fill_value=0)
 
@@ -165,4 +169,3 @@ class Environment:
         self.history["Date"].append(date)
         self.history["Bankroll"].append(self.bankroll)
         self.history["Cash_Invested"].append(cash_invested)
-        print(f"{date.date()} bankroll: {self.bankroll:.2f}", end="\r")

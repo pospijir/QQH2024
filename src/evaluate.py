@@ -7,11 +7,14 @@ sys.path.append(".")
 from model import Model
 from environment import Environment
 
-df = pd.read_csv("./data/training_data.csv", index_col=0)
-df["Date"] = pd.to_datetime(df["Date"])
-df["Open"] = pd.to_datetime(df["Open"])
+games = pd.read_csv("./data/games.csv", index_col=0)
+games["Date"] = pd.to_datetime(games["Date"])
+games["Open"] = pd.to_datetime(games["Open"])
 
-env = Environment(df, Model(), 42, init_bankroll=1000, min_bet=1, max_bet=100)
+players = pd.read_csv("./data/players.csv", index_col=0)
+players["Date"] = pd.to_datetime(players["Date"])
+
+env = Environment(games, players, Model(), init_bankroll=1000, min_bet=1, max_bet=100)
 
 evaluation = env.run()
 
