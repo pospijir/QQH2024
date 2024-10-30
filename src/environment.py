@@ -115,7 +115,7 @@ class Environment:
         
         print(f"{date} Bankroll: {self.bankroll:.2f}   ", end="\r")
 
-        return games, players
+        return games.drop(["Open", *self.bet_cols], axis=1), players
 
     def _get_options(self, date: pd.Timestamp):
         opps = self.games.loc[
