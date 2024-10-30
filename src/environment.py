@@ -112,6 +112,8 @@ class Environment:
 
             # save current bankroll
             self._save_state(date + pd.Timedelta(6, unit="h"), 0.0)
+        
+        print(f"{date} Bankroll: {self.bankroll:.2f}   ", end="\r")
 
         return games, players
 
