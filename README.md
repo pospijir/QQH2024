@@ -26,8 +26,6 @@ Vývojová prostředí (IDE) často umí s conda environmenty pracovat (napřík
 
 Pro ověření funčnosti můžeš rovnou spustit evaluaci modelu, který sází náhodně: `python src/evaluate.py`
 
-Pokud pro své řešení potřebuješ knihovnu, které v `qqh-2024-env.yml` není, napiš nám, pokusíme se Ti vyhovět.
-
 ## Vlastní řešení
 
 Třída, kterou budeš odevzdávat do odevzdávacího systému, se musí jmenovat `Model` a musí obsahovat implementaci metody `place_bets(self, summary: pd.DataFrame, opps: pd.DataFrame, inc: tuple[pd.DataFrame, pd.DataFrame])`. Ukázkový model náhodného sázkaře najdeš [zde](src/model.py).
