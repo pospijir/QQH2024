@@ -20,7 +20,19 @@ Soubor `qqh-2024-env.yml` obsahuje balíčky, které budou dostupné při evalua
 
 1. Nainstaluj si nástroj miniconda: https://docs.anaconda.com/miniconda/
 2. Importuj environment: `conda env create -f qqh-2024-env.yml`
-3. Aktivuj enviroment: `conda activate qqh-2024` 
+3. Aktivuj enviroment: `conda activate qqh-2024`
+
+> Pokud budeš mít problémy s importem environmentu pomocí uvedeného postupu, zkus použít záložní příkaz
+`conda env create -f qqh-2024-env-barebone.yml`. Ten bude trvat výrazně déle, ale měl by být univerzálnější.
+Pokud ani to nepomůže, můžeš si vytvořit vlastní prostředí a balíčky nainstalovat jednotlivě, podle toho zda je chceš používat.
+
+```bash
+conda create -n qqh-2024 python=3.12.4
+conda activate qqh-2024
+conda install -c conda-forge numpy pandas py-xgboost-cpu scikit-learn scipy statsmodels
+conda install -c pytorch pytorch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 cpuonly
+conda install pyg -c pyg
+```
 
 Vývojová prostředí (IDE) často umí s conda environmenty pracovat (například PyCharm či VS Code).
 
