@@ -14,7 +14,7 @@ Sázkař, který má k dispozici 1000 Kč, se rozhodne vsadit 100 Kč na vítěz
 
 ## Zadání
 
-Vaším úkolem bude naprogramovat co nejúspešnějšího sázkaře. V naší soutěži však nebude rozhodovat počet shédnutých zápasů, nýbrž vaše schopnost navrhnout, implementovat a otestovat model, který se naučí predikovat výsledky nadcházejících zápasů z historických dat. 
+Vaším úkolem bude naprogramovat co nejúspešnějšího sázkaře. V naší soutěži však nebude rozhodovat počet shlédnutých zápasů, nýbrž vaše schopnost navrhnout, implementovat a otestovat model, který se naučí predikovat výsledky nadcházejících zápasů z historických dat. 
 
 Váš sázkař je reprezentován třídou [`Model`](src/model.py) s metodou `place_bets`, skrze kterou každý den, kdy jsou na trhu nějaké sázkařské příležitosti, obdržíte shrnutí, sázkařské příležitosti a inkrement dat. Od vás budeme očekávat sázky, které si přejete uskutečnit. Jelikož jednotlivé ročníky soutěží (sezóny) trvají několik měsíců, bude se váš model muset v průběhu sezóny adaptovat na nové výsledky a formu hráčů.
 
