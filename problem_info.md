@@ -2,7 +2,7 @@
 
 Sportovní sázení je hra dvou hráčů: bookmakera a sázkaře.
 Úlohou bookmakera je nabízet sázkařům příležitosti k sázkám s cílem maximalizovat svůj vlastní získ.
-Blíží-li se tedy například nějaké hokejové utkání dvou týmů, bookmaker vypíše tzv. kurzy na možné výsledky.
+Blíží-li se tedy například nějaké basketbalové utkání dvou týmů, bookmaker vypíše tzv. kurzy na možné výsledky.
 Sázkař si může zvolit, na které zápasy a výsledky by si chtěl vsadit.
 V případě, že si sázkař vsadí na výsledek, který nastane, vyhrává sázkař vloženou sázku vynásobenou kurzem bookmakera.
 Pokud daný výsledek nenastane, sázkař svou sázku prohrál.
