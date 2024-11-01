@@ -22,7 +22,7 @@ Soubor `qqh-2024-env.yml` obsahuje balíčky, které budou dostupné při evalua
 2. Importuj environment: `conda env create -f qqh-2024-env.yml`
 3. Aktivuj enviroment: `conda activate qqh-2024`
 
-> Pokud budeš mít problémy s importem environmentu pomocí uvedeného postupu, zkus použít záložní příkaz
+> Pokud budeš mít problémy s importem environmentu pomocí uvedeného postupu (win/mac), zkus použít záložní příkaz
 `conda env create -f qqh-2024-env-barebone.yml`. Ten bude trvat výrazně déle, ale měl by být univerzálnější.
 Pokud ani to nepomůže, můžeš si vytvořit vlastní prostředí a balíčky nainstalovat jednotlivě, podle toho zda je chceš používat.
 
